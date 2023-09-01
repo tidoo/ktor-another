@@ -16,4 +16,5 @@ fun Application.module() {
     configureTemplating()
     configureHTTP()
     configureRouting()
+    // configureSwagger()
 }

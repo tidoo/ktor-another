@@ -8,6 +8,9 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.webjars.*
 
+// import io.ktor.server.plugins.openapi.*
+
+
 fun Application.configureRouting() {
     install(Webjars) {
         path = "/webjars" //defaults to /webjars
@@ -17,6 +20,9 @@ fun Application.configureRouting() {
             call.respondText(text = "500: $cause" , status = HttpStatusCode.InternalServerError)
         }
     }
+    // routing {
+    //     swaggerUI(path = "swagger", swaggerFile = "openapi/documentation.yaml")
+    // }
     routing {
         get("/") {
             call.respondText("Hello World!")
@@ -26,7 +32,10 @@ fun Application.configureRouting() {
         }
         // Static plugin. Try to access `/static/index.html`
         static("/static") {
-            resources("static")
+            resources("files")
+        }
+        static("/static") {
+            resources("files")
         }
     }
 }

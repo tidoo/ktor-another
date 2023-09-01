@@ -1,3 +1,4 @@
+import com.google.cloud.tools.gradle.appengine.appyaml.AppEngineAppYamlExtension
 
 val ktor_version: String by project
 val kotlin_version: String by project
@@ -12,6 +13,11 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.10"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("java")
+    id("com.google.cloud.tools.appengine") version "2.4.2"
+}
+
+kotlin {
+    jvmToolchain(11)
 }
 
 group = "com.example"
@@ -26,6 +32,7 @@ application {
 
 repositories {
     mavenCentral()
+    maven(url = "https://jitpack.io")
 }
 
 dependencies {
@@ -45,10 +52,21 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    implementation("io.ktor:ktor-server-swagger:$ktor_version")
 }
 
 ktor {
     fatJar {
         archiveFileName.set("ktor-r.jar")
+    }
+}
+
+configure<AppEngineAppYamlExtension> {
+    stage {
+        setArtifact("build/libs/ktor-r.jar")
+    }
+    deploy {
+        version = "GCLOUD_CONFIG"
+        projectId = "GCLOUD_CONFIG"
     }
 }
